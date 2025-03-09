@@ -1,0 +1,6 @@
+pymupdf
+python-docx
+openpyxl 
+python-dotenv
+openai
+openai==1.12.0
