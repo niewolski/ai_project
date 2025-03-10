@@ -20,7 +20,7 @@ st.markdown("<p class='title'>Pomocnik dla PATRZ GLOBALNIE</p>", unsafe_allow_ht
 
 # Pole na pytanie
 st.write("### O co chcesz zapytać?")
-query = st.text_input("")
+query = st.text_input("Wpisz swoje pytanie:", label_visibility="collapsed")
 
 # Przycisk do wyszukiwania odpowiedzi
 if st.button("Znajdź odpowiedź"):
