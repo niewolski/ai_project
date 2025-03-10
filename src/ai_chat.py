@@ -6,7 +6,7 @@ from dotenv import load_dotenv
 load_dotenv()
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
 
-# Upewnij się, że klucz API jest poprawnie wczytany
+# Sprawdzenie poprawności klucza API
 if not OPENAI_API_KEY:
     raise ValueError("Błąd: Brak klucza API! Sprawdź plik .env lub zmienne środowiskowe.")
 
@@ -17,14 +17,14 @@ def generate_response(query):
         return "Błąd: Pytanie nie może być puste."
 
     try:
-        response = openai.ChatCompletion.create(  # POPRAWIONA METODA
+        response = openai.chat.completions.create(  # NOWA SKŁADNIA
             model="gpt-3.5-turbo",
             messages=[{"role": "user", "content": query}],
             temperature=0.7
         )
-        return response["choices"][0]["message"]["content"]  # ZWRÓĆ TEKSTOWĄ ODPOWIEDŹ
+        return response.choices[0].message.content  # NOWA METODA ODCZYTU ODPOWIEDZI
 
-    except openai.error.OpenAIError as e:
+    except openai.OpenAIError as e:  # Obsługa błędów API
         return f"Błąd OpenAI API: {e}"
 
     except Exception as e:
