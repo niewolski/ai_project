@@ -12,15 +12,14 @@ def generate_response(query):
         return "Błąd: Brak klucza API. Upewnij się, że zmienna środowiskowa OPENAI_API_KEY jest ustawiona."
 
     try:
-        # Ustawienie klucza API
-        client = openai.OpenAI(api_key=OPENAI_API_KEY)
-
-        response = client.chat.completions.create(
+        # Użycie nowej wersji OpenAI API
+        response = openai.ChatCompletion.create(
             model="gpt-3.5-turbo",
             messages=[{"role": "user", "content": query}],
+            api_key=OPENAI_API_KEY,  # Przekazanie klucza API poprawnie
         )
 
-        return response.choices[0].message.content
+        return response["choices"][0]["message"]["content"]
 
     except Exception as e:
         return f"Błąd OpenAI: {str(e)}"
