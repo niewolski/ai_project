@@ -1,6 +1,6 @@
 pymupdf
 python-docx
 openpyxl 
+openai==1.65.5
+streamlit
 python-dotenv
-openai
-openai==1.12.0
