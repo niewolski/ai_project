@@ -6,26 +6,26 @@ from dotenv import load_dotenv
 load_dotenv()
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
 
-# Sprawdzenie poprawności klucza API
-if not OPENAI_API_KEY:
-    raise ValueError("Błąd: Brak klucza API! Sprawdź plik .env lub zmienne środowiskowe.")
-
 def generate_response(query):
     """Generuje odpowiedź AI na podstawie zadanego pytania."""
-
-    if not query or len(query.strip()) == 0:
-        return "Błąd: Pytanie nie może być puste."
+    if not OPENAI_API_KEY:
+        return "Błąd: Brak klucza API. Upewnij się, że zmienna środowiskowa OPENAI_API_KEY jest ustawiona."
 
     try:
-        response = openai.chat.completions.create(  # NOWA SKŁADNIA
+        client = openai.OpenAI(api_key=OPENAI_API_KEY)  # Nowa inicjalizacja klienta
+        
+        response = client.chat.completions.create(
             model="gpt-3.5-turbo",
             messages=[{"role": "user", "content": query}],
             temperature=0.7
         )
-        return response.choices[0].message.content  # NOWA METODA ODCZYTU ODPOWIEDZI
+        return response.choices[0].message.content  # Nowy format odczytu
 
-    except openai.OpenAIError as e:  # Obsługa błędów API
-        return f"Błąd OpenAI API: {e}"
+    except openai.APIConnectionError:
+        return "Błąd: Problem z połączeniem do OpenAI. Sprawdź swoje połączenie internetowe."
+
+    except openai.APIStatusError as e:
+        return f"Błąd API: {e.status_code} - {e.response.text}"
 
     except Exception as e:
         return f"Błąd krytyczny: {str(e)}"
